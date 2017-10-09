@@ -8,6 +8,7 @@ public class SerialComm {
 
 	private boolean debug;  // Indicator of "debugging mode"
 	
+	
 	// This function can be called to enable or disable "debugging mode"
 	void setDebug(boolean mode) {
 		debug = mode;
@@ -26,11 +27,45 @@ public class SerialComm {
 		debug = false; // Default is to NOT be in debug mode
 	}
 		
-	// TODO: Add writeByte() method from Studio 5
+	void readByte(int val) throws SerialPortException{
+		
+		if(debug){		
+			String hex = String.format("%02x", readByte());
+			System.out.println(hex);
+		}else{
+			String hex = String.format("%02x", readByte());
+			System.out.println(hex);			
+		}
+		
+		
+	}
 	
-	// TODO: Add available() method
+    // TODO: Add available() method
+	boolean available() throws SerialPortException{
+		return port.getInputBufferBytesCount() >= 1;
+	}
 	
 	// TODO: Add readByte() method	
+	byte[] readByte() throws SerialPortException{
+		byte[] val = port.readBytes(1);
+		if(debug){		
+			String hex = String.format("%02x", val[0]);
+			System.out.println(hex);
+		}
+		return val;
+		
+	}
 	
 	// TODO: Add a main() method
+	public static void main(String[] args) throws SerialPortException{
+		SerialComm comm = new SerialComm("COM3");
+		while(true){
+			if(comm.available()){
+				char val = (char)comm.readByte()[0];
+				System.out.print(val);
+				
+			}
+		}
+	}
+	
 }
